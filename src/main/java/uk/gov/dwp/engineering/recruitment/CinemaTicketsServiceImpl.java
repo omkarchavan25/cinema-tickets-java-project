@@ -11,10 +11,6 @@ import uk.gov.dwp.engineering.recruitment.thirdparty.SeatReservationService;
 
 /**
  * Purchases cinema tickets.
- *
- * <p>The flow is: validate the whole request, work out the cost and seats, take payment, then
- * reserve seats. Validation comes first so that nothing is charged or reserved for an invalid
- * request. Payment comes before reservation so that seats are never held for an unpaid booking.
  */
 @Service
 public class CinemaTicketsServiceImpl implements CinemaTicketsService {

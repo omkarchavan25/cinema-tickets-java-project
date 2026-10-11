@@ -9,9 +9,9 @@ reserves seats through the `SeatReservationService` and returns a booking confir
 The request flows **controller → service → validator → payment → seat reservation**.
 
 1. **Validate everything first.** `TicketPurchaseValidator` checks the account id and every
-   ticket request line, combines the lines into a `TicketOrder` (adult, child and infant
+   ticket request line and combines the lines into a `TicketOrder` (adult, child and infant
    totals), then applies the rules to the combined order. An invalid request throws
-   `InvalidBookingException` before any third-party call, so nothing is ever charged or
+   `InvalidBookingException` before any third-party call, so nothing will ever be charged or
    reserved for a request that will be rejected.
 2. **Calculate.** `TicketOrder` works out the seats needed (adults + children) and the total
    cost. Prices live in `TicketPrices`, held as `BigDecimal` so money is never rounded by
@@ -42,18 +42,18 @@ to unit test and to reuse.
 
 | # | Rule | Result |
 |---|------|--------|
-| 1 | Account id must be provided and greater than zero | Rejected – 400 |
-| 2 | At least one ticket request must be provided | Rejected – 400 |
-| 3 | A ticket request must not be null and must have a ticket type | Rejected – 400 |
-| 4 | A ticket count must not be negative | Rejected – 400 |
-| 5 | At least one ticket must be bought in total | Rejected – 400 |
-| 6 | No more than 25 tickets (all types, infants included) per purchase | Rejected – 400 |
-| 7 | Child and infant tickets need at least one adult ticket | Rejected – 400 |
-| 8 | Infants cannot outnumber adults (one infant per adult lap) | Rejected – 400 |
+| 1 | Account id must be provided and greater than zero | Rejected - 400 |
+| 2 | At least one ticket request must be provided | Rejected - 400 |
+| 3 | A ticket request must not be null and must have a ticket type | Rejected - 400 |
+| 4 | A ticket count must not be negative | Rejected - 400 |
+| 5 | At least one ticket must be bought in total | Rejected - 400 |
+| 6 | No more than 25 tickets (all types, infants included) per purchase | Rejected - 400 |
+| 7 | Child and infant tickets need at least one adult ticket | Rejected - 400 |
+| 8 | Infants cannot outnumber adults (one infant per adult lap) | Rejected - 400 |
 | 9 | Prices: adult £25.99, child £17.50, infant £0 | Charged via `PaymentService` |
 | 10 | Adults and children get a seat; infants do not | Reserved via `SeatReservationService` |
-| – | Malformed JSON, unknown ticket type, missing body, wrong field types | Rejected – 400 (Spring) |
-| – | Content type other than JSON | Rejected – 415 (Spring) |
+| - | Malformed JSON, unknown ticket type, missing body, wrong field types | Rejected - 400 (Spring) |
+| - | Content type other than JSON | Rejected - 415 (Spring) |
 
 ## Assumptions and ambiguities
 
@@ -83,15 +83,15 @@ Requires Java 21 and Maven.
 
 ## Tests
 
-* `CinemaTicketsServiceImplTest` – every rule and every rejection, with mocked third-party
+* `CinemaTicketsServiceImplTest` - every rule and every rejection, with mocked third-party
   services. Checks the exact amount paid and seats reserved, that payment happens before
   reservation, and that nothing is called when a request is rejected.
-* `CinemaTicketsControllerTest` – the HTTP contract through MockMvc with the real service and
+* `CinemaTicketsControllerTest` - the HTTP contract through MockMvc with the real service and
   exception handler: 201 responses, a 400 Problem Detail for each broken rule, and 400/415
   for unreadable requests.
-* `CinemaTicketsIntegrationTest` – starts the whole application on a random port and makes
+* `CinemaTicketsIntegrationTest` - starts the whole application on a random port and makes
   real HTTP calls for one valid and one invalid booking.
-* `TicketOrderTest`, `TicketPricesTest` – pricing and seat calculation.
+* `TicketOrderTest`, `TicketPricesTest` - pricing and seat calculation.
 
 ## Example requests
 

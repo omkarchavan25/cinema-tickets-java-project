@@ -7,8 +7,6 @@ import uk.gov.dwp.engineering.recruitment.domain.TicketType;
  * The total number of tickets of each type in a purchase, after all ticket request lines have
  * been combined (e.g. two separate "ADULT x 1" lines become two adults).
  *
- * <p>This is an immutable value object that knows how many seats the order needs and what it
- * costs. It does not apply business rules; that is the job of {@link TicketPurchaseValidator}.
  *
  * @param adults   number of adult tickets
  * @param children number of child tickets
