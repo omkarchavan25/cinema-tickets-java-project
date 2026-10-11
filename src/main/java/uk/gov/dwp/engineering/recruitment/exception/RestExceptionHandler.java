@@ -10,10 +10,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 /**
  * Maps exceptions to RFC 9457 Problem Detail responses.
- *
- * <p>A request that breaks a business rule is the caller's fault, so it is a 400 Bad Request.
- * Malformed JSON, unknown ticket types and a missing body are already turned into 400 Problem
- * Details by {@link ResponseEntityExceptionHandler}.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
